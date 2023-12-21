@@ -1,4 +1,6 @@
 const helpers = {};
+const handlebars = require("handlebars");
+const handlebarsHelpers = require("handlebars-helpers");
 
 helpers.isAuthenticated = (req, res, next) => {
   //console.log(req.user)
@@ -9,5 +11,6 @@ helpers.isAuthenticated = (req, res, next) => {
   res.redirect('/users/signin');
 };
 
+handlebarsHelpers({handlebars});
 
 module.exports = helpers;

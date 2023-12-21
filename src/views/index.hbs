@@ -1,198 +1,534 @@
 <style>
-    .texto {
-        position: absolute;
-        color: rgb(13, 14, 13);
-        font-size: 22px;
-        background-color: rgb(136, 202, 139);
-    }
+    @import url('https://fonts.googleapis.com/css?family=Montserrat+Alternates:400,700');
+
+:root {
+	--sun-color: #ffe65c;
+	--sun-color-rgba: rgb(255, 230, 92);
+	--card-sunny: #ffa333;
+	--moon-night: #2f3475;
+	--moon: #ffe646;
+	--moon-wave: rgb(79,85, 148);
+	--snow-day: #1ec9ed;
+	--foreground-mountain: #82dff9;
+	--background-mountain: #00b4d8;
+}
+
+body {
+	background-color: #dbf8ff;
+}
+
+.grid {
+    margin-top: 100px;
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+.card--weather {
+	margin: 1rem 2rem;
+	width: 500PX;
+	border-radius: 0.5rem;
+	position: relative;
+	overflow: hidden;
+}
+.weather--indicator {
+	position: absolute;
+	font-size: 2.5rem;
+	color: white;
+	z-index: 2;
+	font-family: 'Montserrat Alternates', sans-serif;
+	bottom: 1.5rem;
+	left: 1.5rem;
+}
+
+.moon-indicator {
+	text-shadow: 1px 3px #182067; 
+}
+.sun-indicator {
+	text-shadow: 1px 3px #ff9406; 
+}
+.sunny-day {
+	background-color: var(--card-sunny);
+	box-shadow: 0 5px 10px var(--card-sunny);
+	animation: .3s ease-in-out sunny-hover--back both;
+}
+.card--weather.sunny-day:hover {
+	animation: .3s ease-in-out 0s sunny-hover both;
+}
+.card--weather.moon-night:hover {
+	animation: .3s ease-in-out 0s moon-hover both;
+}
+.card--weather.snow-day:hover {
+	animation: .3s ease-in-out 0s snow-hover both;
+}
+.sunny-day .sun {
+	width: 7rem;
+	height: 7rem;
+	border-radius: 100%;
+	position: absolute;
+	top: -4rem;
+	right: -2.8rem;
+	background-color: var(--sun-color);
+	animation: sun-rays 4s infinite;
+	box-shadow: 0 0 1rem rgba(255, 192, 98, 0.4),
+				0 0 0 2.8rem rgb(255, 198, 102),
+				0 0 0 3rem rgb(255, 175, 73),
+				0 0 0 4.8rem rgb(255, 177, 77);
+}
+
+.moon-night {
+	background-color: var(--moon-night);
+	box-shadow: 0 5px 10px var(--moon-night);
+	animation: .3s ease-in-out moon-hover--back both;
+}
+
+.snow-day {
+	background-color: var(--snow-day);
+	box-shadow: 0 5px 10px var(--snow-day);
+	animation: .3s ease-in-out snow-hover--back both;
+}
+
+.foreground-mountain {
+	background-color: var(--foreground-mountain);
+	width: 34rem;
+	height: 10rem;
+	border-radius: 100%;
+	position: absolute;
+	bottom: -6.6rem;
+	left: 1rem;
+	box-shadow: 0 0 2rem #1ec9ed;
+}
+.background-mountain {
+	background-color: var(--background-mountain);
+	width: 24rem;
+	height: 10rem;
+	border-radius: 100%;
+	position: absolute;
+	top: 5rem;
+	left: -17rem;
+	box-shadow: 0 0 2rem #1ec9ed;
+}
+
+.moon-night .moon {
+	width: 2.5rem;
+	height: 2.5rem;
+	background-color: var(--moon);
+	border-radius: 100%;
+	position: absolute;
+	top: 2rem;
+	right: 1.5rem;
+	animation: moon-rays 4s infinite;
+	box-shadow: 0 0 1rem rgb(79,85, 148),
+				0 0 0 1.5rem rgb(79,85, 148),
+				0 0 3rem rgb(79,85,148),
+				0 0 0 3.5rem rgb(65,73, 137),
+				0 0 5rem rgb(44,52, 114);
+}
+
+@keyframes snow-hover {
+	0% 	 { box-shadow: 0 5px 10px var(--snow-day); }
+	100% { box-shadow: 0 10px 20px var(--snow-day); }
+}
+
+@keyframes snow-hover--back {
+	0%   { box-shadow: 0 10px 20px var(--snow-day);}
+	100% { box-shadow: 0 5px 10px var(--snow-day);}
+}
+
+@keyframes moon-hover {
+	0% 	 { box-shadow: 0 5px 10px var(--moon-night); }
+	100% { box-shadow: 0 10px 20px var(--moon-night); }
+}
+
+@keyframes moon-hover--back {
+	0%   { box-shadow: 0 10px 20px var(--moon-night);}
+	100% { box-shadow: 0 5px 10px var(--moon-night);}
+}
+
+@keyframes sunny-hover {
+	0% 	 { box-shadow: 0 5px 10px var(--card-sunny); }
+	100% { box-shadow: 0 10px 20px var(--card-sunny); }
+}
+
+@keyframes sunny-hover--back {
+	0%   { box-shadow: 0 10px 20px var(--card-sunny); }
+	100% { box-shadow: 0 5px 10px var(--card-sunny); }
+}
+
+@keyframes sun-rays {
+	0%   {box-shadow: 
+				0 0 1rem rgba(255, 192, 98, 0.4),
+				0 0 0 2.8rem rgb(255, 198, 102),
+				0 0 0 3rem rgb(255, 175, 73),
+				0 0 0 4.8rem rgb(255, 177, 77);}
+	50%  {box-shadow: 
+				0 0 .8rem rgba(255, 192, 98, 0.4),
+				0 0 0 2.2rem rgb(255, 198, 102),
+				0 0 0 2.8rem rgb(255, 175, 73),
+				0 0 0 4.4rem rgb(255, 177, 77);}
+	100% {box-shadow: 
+				0 0 1rem rgba(255, 192, 98, 0.4),
+				0 0 0 2.8rem rgb(255, 198, 102),
+				0 0 0 3rem rgb(255, 175, 73),
+				0 0 0 4.8rem rgb(255, 177, 77);}
+}
+
+@keyframes moon-rays {
+	0%   {box-shadow: 
+				0 0 1rem rgb(79,85, 148),
+				0 0 0 1.5rem rgb(79,85, 148),
+				0 0 3rem rgb(79,85,148),
+				0 0 0 3.5rem rgb(65,73, 137),
+				0 0 5rem rgb(44,52, 114);}
+	50%  {box-shadow: 
+				0 0 1rem rgb(79,85, 148),
+				0 0 0 1.8rem rgb(79,85, 148),
+				0 0 3rem rgb(79,85,148),
+				0 0 0 3.3rem rgb(65,73, 137),
+				0 0 5rem rgb(44,52, 114);}
+	100% {box-shadow: 
+				0 0 1rem rgb(79,85, 148),
+				0 0 0 1.5rem rgb(79,85, 148),
+				0 0 3rem rgb(79,85,148),
+				0 0 0 3.5rem rgb(65,73, 137),
+				0 0 5rem rgb(44,52, 114);}
+}
+
+.div {
+  font-family: 'Calligraffitti', cursive;
+  font-weight: 700;
+  font-size: 13rem;
+  position: absolute;
+  text-shadow: -15px 5px 20px #ced0d3;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  letter-spacing: 0.02em;
+  text-align: center;
+  color: #F9f1cc;
+  text-shadow: 5px 5px 0px #FFB650, 
+    10px 10px 0px #FFD662, 
+    15px 15px 0px  #FF80BF, 
+    20px 20px 0px #EF5097, 
+    25px 25px 0px #6868AC, 
+    30px 30px 0px #90B1E0;
+}
+    h1{
+				font-size: 4em;
+				text-align: center;
+				padding-top: 50px;
+				color: #ADD8E6;
+				font-family: "agency fb";
+				margin: 0;
+			}
+			
+			.container{
+				width: 800px;
+				height: 100vh;
+				margin: 0 auto;
+			}
+			
+			.weather-sun,.weather-cloud,.weather-snow,.weather-cloudAndSun,.weather-rain{
+				width: 200px;
+				height: 200px;
+				display: inline-block;
+				position: relative;
+			}
+			
+			.weather-cloudAndSun,.weather-rain{
+				margin-left: 60px;
+			}
+			
+			.sun{
+				width: 100px;
+				height: 100px;
+				background: linear-gradient(45deg,#F3A966,yellow);
+				border-radius: 100%;
+				transform: rotate(0deg);
+				animation: xuanzhuang 12s infinite linear;
+				position: absolute;
+				left: 50%;
+				top: 50%;
+			}
+			
+			.rays{
+				width: 8px;
+				height: 15px;
+				background: yellow;
+				position: absolute;
+				transform: translateX(-50%);
+				left: 50%;
+				top: -25px;
+				box-shadow: 0 135px yellow;
+				border-radius: 4px;
+				transform-origin: 0px 75px;
+			}
+			
+			.rays:nth-child(2){
+				transform: rotate(45deg);
+			}
+			
+			.rays:nth-child(3){
+				transform: rotate(90deg);
+			}
+			
+			.rays:nth-child(4){
+				transform: rotate(135deg);
+			}
+			
+			@keyframes xuanzhuang {
+				100% { transform: rotate(360deg); }
+			}
+			
+			
+			.cloud{
+				border-radius: 25px;
+				position: absolute;
+				top: 70%;
+				left: 50%;
+				width: 150px;
+				height: 50px;
+				background: #cdedf8;
+			}
+			
+			.cloud:nth-child(2){
+				left: 200px;
+				width: 100px;
+				height: 30px;
+				background: #cdedf8;
+				opacity: 1;
+				animation: cloud 8s linear infinite;
+			}
+			
+			.cloud::after,.cloud::before{
+				content: '';
+				display: block;
+				background: #cdedf8;
+				border-radius: 50%;
+				position: absolute;
+				
+			}
+			
+			.cloud:nth-child(2)::after,.cloud:nth-child(2)::before{
+				content: '';
+				display: block;
+				background: #cdedf8;
+				border-radius: 50%;
+				position: absolute;
+				
+			}
+			
+			.cloud::after{
+				width: 80px;
+				height: 80px;
+				left: 45px;
+				top: -45px;
+			}
+			
+			.cloud::before{
+				width: 60px;
+				height: 60px;
+				top: -10px;
+				left: 0;
+			}
+			
+			.cloud:nth-child(2)::after{
+				width: 50px;
+				height: 50px;
+				left: 35px;
+				top: -30px;
+			}
+			
+			.cloud:nth-child(2)::before{
+				width: 40px;
+				height: 40px;
+				top: -10px;
+				left: 0px;
+			}
+			
+			@keyframes cloud {
+				0% { opacity: 0; }
+				50% { opacity: 1; }
+				100% {
+					opacity: 0;
+					transform: scale(0.8) translateX(-200%);
+				}
+			}
+			
+			.snow{
+				width: 150px;
+				height: 10px;
+				border-radius: 5px;
+				background: #CDEDF8;
+				transform: rotate(0deg);
+				position: absolute;
+				top: 70%;
+				left: 60%;
+				animation: Rotate 12s infinite linear;
+				position: relative;
+			}
+			
+			.snow::after,.snow::before{
+				content: '';
+				width: 150px;
+				height: 10px;
+				border-radius: 5px;
+				background: #CDEDF8;
+				position: absolute;
+			}
+			
+			.snow::after{
+				transform: rotate(60deg);
+			}
+			
+			.snow::before{
+				transform: rotate(120deg);
+			}
+			
+			.f{
+				width: 28px;
+				height: 10px;
+				border-radius: 5px;
+				position: absolute;
+				background: #CDEDF8;
+				top: -45px;
+				left: 25px;
+				box-shadow: 0px 90px #CDEDF8,72px 90px #CDEDF8,72px 0px #CDEDF8;
+			}
+			
+			.f::after,.f::before{
+				content: '';
+				width: 28px;
+				height: 10px;
+				transform: rotate(60deg);
+				border-radius: 5px;
+				position: absolute;
+				background: #CDEDF8;
+				top: -10px;
+				left: 55px;
+				box-shadow: 0px 90px #CDEDF8,72px 90px #CDEDF8,72px 0px #CDEDF8;
+			}
+			
+			.f::before{
+				transform: rotate(120deg);
+				left: 15px;
+				box-shadow: 72px 0px #CDEDF8,72px -90px #CDEDF8,0px -90px #CDEDF8;
+			}
+			
+			@keyframes Rotate {
+				100% { transform: rotate(360deg); }
+			}
+			
+			.weather-cloudAndSun .cloud{
+				z-index: 1;
+				opacity: 0.95;
+			}
+			
+			.weather-cloudAndSun .sun{
+				position: absolute;
+				left: 180px;
+				top: 60px;
+				z-index: 0;
+			}
+			
+			.rain{
+				width: 4px;
+				height: 40px;
+				background:linear-gradient(transparent,lightblue);
+				position: absolute;
+				left: 210px;
+				top: 170px;
+				border-radius: 2px;
+				animation: rainning 2s infinite;
+			}
+			
+			.rain:nth-child(2){
+				height: 20px;
+				left: 190px;
+				top: 190px;
+			}
+			
+			.rain:nth-child(3){
+				height: 50px;
+				left: 170px;
+				top: 180px;
+			}
+			
+			.rain:nth-child(4){
+				height: 25px;
+				left: 150px;
+				top: 185px;
+			}
+			
+			@keyframes rainning{
+				100%{
+					top: 200px;
+				}
+			}
 </style>
 
-
-<div class="container-fluid py-4">
-    <div class="row">
-        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-            <div class="card">
-                <div class="card-body p-3">
-                    <div class="row">
-                        <div class="col-8">
-                            <div class="numbers">
-                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Agua destilada</p>
-                                <h5 class="font-weight-bolder">
-                                    32
-                                </h5>
-                                <p class="mb-0">
-                                    <span class="text-success text-sm font-weight-bolder">+55%</span>
-                                    que año anterior
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-4 text-end">
-                            <div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
-                                <i class="fa fa-users text-lg opacity-10" aria-hidden="true"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<div  class="grid">
+    
+    <h1>Datos de temperatura y humedad con IOT</h1>
+    {{#if (eq sit 1)}}
+	    <div class="card--weather sunny-day">
+		    <div class="bg--illustration">
+			    <div class="sun"></div>
+		    </div>
+		    <div class="weather--indicator sun-indicator">
+                <h5>Temperatura</h5>
+                <h6>{{ultimoDato.temperatura}}ºC</h6>
             </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-            <div class="card">
-                <div class="card-body p-3">
-                    <div class="row">
-                        <div class="col-8">
-                            <div class="numbers">
-                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Equipos Instalados</p>
-                                <h5 class="font-weight-bolder">
-                                    480
-                                </h5>
-                                <p class="mb-0">
-                                    <span class="text-success text-sm font-weight-bolder">+3%</span>
-                                    en la última semana
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-4 text-end">
-                            <div class="icon icon-shape bg-gradient-danger shadow-danger text-center rounded-circle">
-                                <i class="fa fa-user-plus text-lg opacity-10" aria-hidden="true"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div  style="margin-top: 200px; margin-left: 10px; font-family: 'Montserrat Alternates', sans-serif; color: white;">
+                <h6 >TEMPERATURA ALTA <br>
+                    ENCENDIENDO VENTILADOR
+                </h6>
+                <p></p>
             </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-            <div class="card">
-                <div class="card-body p-3">
-                    <div class="row">
-                        <div class="col-8">
-                            <div class="numbers">
-                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Energía generada</p>
-                                <h5 class="font-weight-bolder">
-                                    +45 kW
-                                </h5>
-                                <p class="mb-0">
-                                    <span class="text-danger text-sm font-weight-bolder">-2%</span>
-                                    que el mes anterior
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-4 text-end">
-                            <div class="icon icon-shape bg-gradient-success shadow-success text-center rounded-circle">
-                                <i class="fa fa-bolt text-lg opacity-10" aria-hidden="true"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+	    </div>
+    {{else}}
+	    <div class="card--weather snow-day">
+		    <div class="bg--illustration">
+			    <div class="moutains">
+				    <div class="background-mountain"></div>
+				    <div class="foreground-mountain"></div>
+			    </div>
+		    </div>
+		    <div class="weather--indicator snow-indicator">
+                <h5>Temperatura</h5>
+                <h6>{{ultimoDato.temperatura}}ºC</h6>
             </div>
-        </div>
-        <div class="col-xl-3 col-sm-6">
-            <div class="card">
-                <div class="card-body p-3">
-                    <div class="row">
-                        <div class="col-8">
-                            <div class="numbers">
-                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Beneficios</p>
-                                <h5 class="font-weight-bolder">
-                                    +$56 Millones
-                                </h5>
-                                <p class="mb-0">
-                                    <span class="text-success text-sm font-weight-bolder">+5%</span> mes anterior
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-4 text-end">
-                            <div class="icon icon-shape bg-gradient-warning shadow-warning text-center rounded-circle">
-                                <i class="fa fa-leaf text-lg opacity-10" aria-hidden="true"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div  style="margin-top: 200px; margin-left: 10px; font-family: 'Montserrat Alternates', sans-serif; color: white;">
+                <h6>.</h6>
             </div>
+	    </div>
+        
+    {{/if}}
+    <div class="card--weather moon-night">
+        
+		<div style="margin-left: 200px;" class="bg--illustration">
+            <div  class="weather-cloud">
+				<div class="cloud"></div>
+				<div class="cloud"></div>
+			</div>
+		</div>
+		<div class="weather--indicator moon-indicator">
+            {{#if (eq sih 1)}}
+                <h5>Humedad alta</h5>
+            {{else}}
+                <h5>Humedad</h5>
+            {{/if}}
+            <h6>{{ultimoDato.humedad}}%</h6>
         </div>
-    </div>
-    <div class="row mt-4">
-        <div class="col-lg-7 mb-lg-0 mb-4">
-            <div class="card z-index-2 h-100">
-                <div class="card-header pb-0 pt-3 bg-transparent">
-
-                    <h4>Destiladores solares activos</h4>
-
-                    El proceso de desalinización es un método que permite eliminar los contaminantes y las sales
-                    contenidas en las aguas salobres o en el agua de mar, hasta convertirla en agua dulce. Los
-                    destiladores solares son equipos que sirven para tratar este tipo de aguas, a través de procesos
-                    térmicos de cambio de fase, para conseguir agua dulce apta para el consumo humano y para las
-                    actividades cotidianas de las personas.
-                    <br>
-                    <br>
-                    La destilación solar es una técnica autosostenible que promete obtener agua potable en lugares
-                    remotos, de una manera económica y ecológica. Sin embargo, la baja productividad es el inconveniente
-                    de los destiladores solares tradicionales para satisfacer la creciente demanda de agua potable.
-                    <br>
-                    <br>
-                    <h5>Lo novedoso del software</h5>
-                    El software permite hallar el área del desalinizador solar a partir del volumen inicial del agua
-                    salobre o agua de mar para tratar, la potencia de la resistencia eléctrica necesaria para elevar el
-                    agua salubre a los rangos que el usuario estime y las características mínimas de los equipos
-                    fotovoltaicos para que trabaje de manera híbrida y autónoma, en pro de aumentar el rendimiento y
-                    producción de agua destilada en el sistema de destilación solar.
-                    El software es novedoso, ya que utiliza ecuaciones inéditas para el dimensionamiento del sistema y
-                    proporciona resultados concretos y de fácil interpretación para el usuario.
-                    <br>
-                    <br>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-5">
-            <div class="card card-carousel overflow-hidden h-100 p-0">
-                <div id="carouselExampleCaptions" class="carousel slide h-100" data-bs-ride="carousel">
-                    <div class="carousel-inner border-radius-lg h-100">
-                        <div class="carousel-item h-100 active" style="background-image: url('/assets/img/real1.jpg');
-      background-size: cover;">
-                            <div class="carousel-caption d-none d-md-block bottom-0 text-start start-0 ms-5">
-                                <div class="icon icon-shape icon-sm bg-white text-center border-radius-md mb-3">
-                                    <i class="ni ni-camera-compact text-dark opacity-10"></i>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="carousel-item h-100" style="background-image: url('./assets/img/real2.jpg');
-      background-size: cover;">
-                            <div class="carousel-caption d-none d-md-block bottom-0 text-start start-0 ms-5">
-                                <div class="icon icon-shape icon-sm bg-white text-center border-radius-md mb-3">
-                                    <i class="ni ni-bulb-61 text-dark opacity-10"></i>
-                                </div>
-
-
-
-                            </div>
-                        </div>
-                        <div class="carousel-item h-100" style="background-image: url('./assets/img/real3.jpg');
-      background-size: cover;">
-                            <div class="carousel-caption d-none d-md-block bottom-0 text-start start-0 ms-5">
-                                <div class="icon icon-shape icon-sm bg-white text-center border-radius-md mb-3">
-                                    <i class="ni ni-bulb-61 text-dark opacity-10"></i>
-                                </div>
-
-
-                            </div>
-                        </div>
-                        <div class="carousel-item h-100" style="background-image: url('./assets/img/real4.jpg');
-      background-size: cover;">
-                            <div class="carousel-caption d-none d-md-block bottom-0 text-start start-0 ms-5">
-                                <div class="icon icon-shape icon-sm bg-white text-center border-radius-md mb-3">
-                                    <i class="ni ni-bulb-61 text-dark opacity-10"></i>
-                                </div>
-
-
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-
+	</div>
 </div>
+
+<script>
+  // Función para recargar la página cada 4 segundos
+  function recargarPagina() {
+    location.reload(true); // El parámetro true fuerza la recarga desde el servidor, no desde la caché del navegador
+  }
+
+  // Programa la recarga cada 4 segundos
+  setInterval(recargarPagina, 4000);
+</script>

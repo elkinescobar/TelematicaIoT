@@ -1,117 +1,61 @@
 const principalCtrl = {};
-const Sensores = require("../models/sensor");
-
-principalCtrl.registrarSensor = (req, res) => {
-  res.render("registrar");
-};
-
-principalCtrl.listarSensores = async (req, res) => {
-  const listadosensores = await Sensores.find();
-  console.log(listadosensores);
-  res.render("listado", { listadosensores });
-};
-
-principalCtrl.editarSensor = async (req, res) => {
-  const sensor = await Sensores.findById(req.params.id);
-  console.log(sensor);
-  res.render("editarSensor", { sensor });
-};
-
-principalCtrl.actualizarSensor = async (req, res) => {
-  const idSensor = req.body.id;
-  console.log(idSensor);
-  console.log(req.body.facultad);
-  await Sensores.findByIdAndUpdate(
-    idSensor,
-    {
-      nombre: req.body.nombre,
-      ubicacion: req.body.ubicacion,
-      tipo: req.body.tipo,
-      latitud: req.body.latitud,
-      longitud: req.body.longitud,
-      valor: req.body.valor,
-    },
-    (error, idSensor) => {
-      console.log(error, idSensor);
-      res.redirect("/mostrarsensores");
+const Datos = require("../models/datos");
+global.siT = null;
+global.siH = null;
+principalCtrl.postValorIoT = async (req, res) => {
+  var DatosSensor = req.body;
+  console.log(DatosSensor);
+  var humedad = DatosSensor.humedad;
+  var temperatura = DatosSensor.temperatura;
+  console.log(humedad);
+  console.log(temperatura);
+  
+  if (DatosSensor) {
+    respuesta = {
+      error : false,
+      codigo : 200,
+      mensaje : "Dato recibido"
     }
-  );
-};
-
-/*principalCtrl.editarSensor = async (req, res) => {
-  const sensor = await Sensores.findById(req.params.id);
-  if (!sensor) {
-    req.flash("error_msg", "Sensor no encontrado");
-    return res.redirect("/mostrarsensores");
+    res.send (respuesta);
   }
-  res.render("editarSensor", { sensor });
+   else {
+    respuesta = {
+      error : true,
+      codigo : 501,
+      mensaje : "Error"
+    }
+    res.send (respuesta);
+  }
+
+  const newDatos = new Datos ({
+    humedad,
+    temperatura,
+  });
+
+  await newDatos.save();
 };
 
-principalCtrl.actualizarSensor = async (req, res) => {
-  const { nombre, ubicacion, tipo, latitud, longitud, valor } = req.body;
+principalCtrl.mostrardatos = async (req, res) => {
   try {
-    const sensorActualizado = await Sensores.findByIdAndUpdate(
-      req.params.id,
-      { nombre, ubicacion, tipo, latitud, longitud, valor },
-      { new: true }
-    );
-    if (!sensorActualizado) {
-      req.flash("error_msg", "Sensor no encontrado");
-      return res.redirect("/mostrarsensores");
+    const ultimoDato = await Datos.findOne().sort({ _id: -1 }).lean();
+    global.siT = 0;
+    global.siH = 0;
+    const temperaturamax = 35;
+    const humedadmax = 70;
+    if (ultimoDato.temperatura > temperaturamax){
+      global.siT = 1;
     }
-    req.flash("success_msg", "Sensor actualizado correctamente");
-    res.redirect("/mostrarsensores");
+    if (ultimoDato.humedad > humedadmax){
+      global.siH = 1;
+    }
+    const sit = global.siT;
+    const sih = global.siH;
+    console.log(ultimoDato);
+    res.render("index", { ultimoDato, sit, sih});
   } catch (error) {
+    // Manejar el error, por ejemplo, enviar una respuesta de error al cliente
     console.error(error);
-    req.flash("error_msg", "Error al actualizar el sensor");
-    res.redirect("/mostrarsensores");
-  }
-};*/
-
-principalCtrl.guardarSensor = async (req, res) => {
-  const { nombre, ubicacion, tipo, latitud, longitud, valor } = req.body;
-  const errors = [];
-  if (!nombre) {
-    errors.push({ text: "Por favor indique Nombre del sensor" });
-  }
-  if (!ubicacion) {
-    errors.push({ text: "Por favor indique la ubicacion" });
-  }
-  if (!tipo) {
-    errors.push({ text: "Por favor indique tipo producto" });
-  }
-  if (!latitud) {
-    errors.push({ text: "Por favor indique la latitud" });
-  }
-  if (!longitud) {
-    errors.push({ text: "Por favor indique la longitud" });
-  }
-  if (!valor) {
-    errors.push({ text: "Por favor indique el valor" });
-  }
-  if (errors.length > 0) {
-    res.render("registrar", {
-      errors,
-      nombre,
-      ubicacion,
-      tipo,
-      latitud,
-      longitud,
-      valor,
-    });
-  } else {
-    const newSensor = new Sensores({
-      nombre,
-      ubicacion,
-      tipo,
-      latitud,
-      longitud,
-      valor,
-    });
-    newSensor.user = req.user.id;
-    await newSensor.save();
-    req.flash("success_msg", "Producto adicionado correctamente");
-    res.redirect("/mostrarsensores");
+    res.status(500).send("Error al obtener el último dato.");
   }
 };
 
