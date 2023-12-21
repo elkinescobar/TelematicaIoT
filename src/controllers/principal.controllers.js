@@ -40,7 +40,7 @@ principalCtrl.mostrardatos = async (req, res) => {
     const ultimoDato = await Datos.findOne().sort({ _id: -1 }).lean();
     global.siT = 0;
     global.siH = 0;
-    const temperaturamax = 35;
+    const temperaturamax = 30;
     const humedadmax = 70;
     if (ultimoDato.temperatura > temperaturamax){
       global.siT = 1;
